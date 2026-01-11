@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android App Deployment Workflow - Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .slide-title {
+            font-size: 3.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .slide-subtitle {
+            font-size: 1.5em;
+            opacity: 0.9;
+        }
+
+        .slide-content {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        .phase-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .phase-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .phase-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .phase-desc {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .step-grid {
+            display: grid;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .step-card {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 6px solid #48bb78;
+        }
+
+        .step-card h3 {
+            color: #2d3748;
+            margin-bottom: 12px;
+            font-size: 1.4em;
+        }
+
+        .step-card p {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        .testing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .testing-box {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 12px;
+            border-top: 4px solid #667eea;
+        }
+
+        .testing-box h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .testing-box ul {
+            margin-left: 20px;
+            color: #4a5568;
+            line-height: 1.8;
+        }
+
+        .testing-box ul li {
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .highlight-stat {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .coverage-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .coverage-item {
+            background: #c6f6d5;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #48bb78;
+            font-weight: bold;
+            color: #22543d;
+        }
+
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .state-item {
+            background: #c6f6d5;
+            padding: 12px 8px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.9em;
+            border: 2px solid #48bb78;
+            color: #22543d;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .metric-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .key-points {
+            background: #fff5f5;
+            border-left: 6px solid #f56565;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .key-points h3 {
+            color: #c53030;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .key-points ul {
+            margin-left: 20px;
+            color: #742a2a;
+            line-height: 1.8;
+        }
+
+        .key-points ul li {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .success-box {
+            background: #c6f6d5;
+            border-left: 6px solid #48bb78;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .success-box h3 {
+            color: #22543d;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .success-box ul {
+            margin-left: 20px;
+            color: #22543d;
+            line-height: 1.8;
+        }
+
+        .success-box ul li {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .workflow-timeline {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 40px 0;
+        }
+
+        .timeline-step {
+            text-align: center;
+            flex: 1;
+        }
+
+        .timeline-circle {
+            width: 80px;
+            height: 80px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0 auto 15px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .timeline-label {
+            font-size: 1.2em;
+            color: #2d3748;
+            font-weight: bold;
+        }
+
+        .timeline-arrow {
+            font-size: 2em;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- SLIDE 1: Title -->
+        <div class="slide active">
+            <div class="slide-header">
+                <div class="slide-title">🚀 Android App Deployment Workflow</div>
+                <div class="slide-subtitle">From Internal Branch to Main Release</div>
+            </div>
+            <div class="slide-content">
+                <div style="text-align: center; padding: 60px 0;">
+                    <div style="font-size: 4em; margin-bottom: 30px;">📱</div>
+                    <h2 style="font-size: 2.5em; color: #2d3748; margin-bottom: 30px;">Complete Testing & Validation Process</h2>
+                    <p style="font-size: 1.5em; color: #718096; line-height: 1.8;">
+                        A comprehensive approach to app deployment combining internal testing with crowdsourced validation across India
+                    </p>
+                    <div class="workflow-timeline" style="margin-top: 80px;">
+                        <div class="timeline-step">
+                            <div class="timeline-circle">1</div>
+                            <div class="timeline-label">Create Release</div>
+                        </div>
+                        <div class="timeline-arrow">→</div>
+                        <div class="timeline-step">
+                            <div class="timeline-circle">2</div>
+                            <div class="timeline-label">Test & Validate</div>
+                        </div>
+                        <div class="timeline-arrow">→</div>
+                        <div class="timeline-step">
+                            <div class="timeline-circle">3</div>
+                            <div class="timeline-label">Deploy to Main</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: Phase 1 Overview -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Phase 1: Create Internal Release</div>
+            </div>
+            <div class="slide-content">
+                <div class="phase-box">
+                    <div class="phase-number">01</div>
+                    <div class="phase-title">Build & Deploy Release Candidate</div>
+                    <div class="phase-desc">Deploy from latest internal branch commit to testing channels</div>
+                </div>
+                
+                <div class="step-grid">
+                    <div class="step-card">
+                        <h3>📋 Select Latest Commit</h3>
+                        <p><strong>Branch:</strong> internal<br>
+                        <strong>Commit:</strong> a7f3d2c<br>
+                        <strong>Message:</strong> "Added new feature X and fixed bug Y"</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <h3>🔨 Build Release Candidate</h3>
+                        <p><strong>Version:</strong> v2.4.0-internal.15<br>
+                        <strong>Build Type:</strong> Release APK/AAB<br>
+                        <strong>Status:</strong> ✅ Success (3m 24s)</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <h3>📦 Deploy to Internal Channel</h3>
+                        <p><strong>Distribution:</strong> Firebase App Distribution<br>
+                        <strong>Testers:</strong> Internal Team (50) + Karya Workers (500)<br>
+                        <strong>Status:</strong> ✅ Deployed successfully</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Phase 2 Overview -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Phase 2: Testing & Validation</div>
+            </div>
+            <div class="slide-content">
+                <div class="phase-box">
+                    <div class="phase-number">02</div>
+                    <div class="phase-title">Comprehensive Testing</div>
+                    <div class="phase-desc">Dual-track testing approach for maximum coverage</div>
+                </div>
+                
+                <div class="testing-grid">
+                    <div class="testing-box">
+                        <h3>👥 Internal Team Testing</h3>
+                        <div class="highlight-stat">50 Testers</div>
+                        <ul>
+                            <li>Critical user journeys</li>
+                            <li>New feature validation</li>
+                            <li>Regression testing</li>
+                            <li>Performance benchmarks</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="testing-box">
+                        <h3>🌍 Karya Platform Testing</h3>
+                        <div class="highlight-stat">500 Crowdsourced Workers</div>
+                        <ul>
+                            <li>Real device testing across India</li>
+                            <li>Multiple OS versions (9-14)</li>
+                            <li>Diverse network conditions</li>
+                            <li>Regional language testing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="color: #2d3748; margin: 30px 0 20px; font-size: 1.6em;">Why Dual-Track Testing?</h3>
+                <p style="color: #4a5568; font-size: 1.2em; line-height: 1.8;">
+                    Combines deep technical expertise with real-world diversity. Internal team ensures quality standards while Karya platform validates across varied devices, networks, and geographic conditions.
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Coverage Metrics -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Testing Coverage</div>
+            </div>
+            <div class="slide-content">
+                <h2 style="color: #2d3748; margin-bottom: 25px; font-size: 2em;">📱 Android OS Version Coverage</h2>
+                <div class="coverage-grid">
+                    <div class="coverage-item">Android 9<br><small>50 devices</small></div>
+                    <div class="coverage-item">Android 10<br><small>100 devices</small></div>
+                    <div class="coverage-item">Android 11<br><small>120 devices</small></div>
+                    <div class="coverage-item">Android 12<br><small>100 devices</small></div>
+                    <div class="coverage-item">Android 13<br><small>80 devices</small></div>
+                    <div class="coverage-item">Android 14<br><small>50 devices</small></div>
+                </div>
+
+                <h2 style="color: #2d3748; margin: 40px 0 25px; font-size: 2em;">🗺️ Geographic Coverage - 29 States</h2>
+                <div class="state-grid">
+                    <div class="state-item">Andhra Pradesh</div>
+                    <div class="state-item">Arunachal Pradesh</div>
+                    <div class="state-item">Assam</div>
+                    <div class="state-item">Bihar</div>
+                    <div class="state-item">Chhattisgarh</div>
+                    <div class="state-item">Goa</div>
+                    <div class="state-item">Gujarat</div>
+                    <div class="state-item">Haryana</div>
+                    <div class="state-item">Himachal Pradesh</div>
+                    <div class="state-item">Jharkhand</div>
+                    <div class="state-item">Karnataka</div>
+                    <div class="state-item">Kerala</div>
+                    <div class="state-item">Madhya Pradesh</div>
+                    <div class="state-item">Maharashtra</div>
+                    <div class="state-item">Manipur</div>
+                    <div class="state-item">Meghalaya</div>
+                    <div class="state-item">Mizoram</div>
+                    <div class="state-item">Nagaland</div>
+                    <div class="state-item">Odisha</div>
+                    <div class="state-item">Punjab</div>
+                    <div class="state-item">Rajasthan</div>
+                    <div class="state-item">Sikkim</div>
+                    <div class="state-item">Tamil Nadu</div>
+                    <div class="state-item">Telangana</div>
+                    <div class="state-item">Tripura</div>
+                    <div class="state-item">Uttar Pradesh</div>
+                    <div class="state-item">Uttarakhand</div>
+                    <div class="state-item">West Bengal</div>
+                    <div class="state-item">Delhi</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Testing Metrics -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Testing Metrics & Results</div>
+            </div>
+            <div class="slide-content">
+                <h2 style="color: #2d3748; margin-bottom: 30px; font-size: 2em; text-align: center;">Key Performance Indicators</h2>
+                
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-value">550</div>
+                        <div class="metric-label">Total Test Sessions</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value">528</div>
+                        <div class="metric-label">Passed Tests</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value">3-5</div>
+                        <div class="metric-label">Issues Found</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value"><0.5%</div>
+                        <div class="metric-label">Crash Rate</div>
+                    </div>
+                </div>
+
+                <div class="key-points">
+                    <h3>⚠️ Issue Management</h3>
+                    <ul>
+                        <li><strong>Critical Issues:</strong> Block release until resolved</li>
+                        <li><strong>High Priority:</strong> Must be fixed before production</li>
+                        <li><strong>Medium Priority:</strong> Can be addressed in next iteration</li>
+                        <li><strong>All issues tracked:</strong> Location, device, OS version, severity</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h3>✅ Success Criteria</h3>
+                    <ul>
+                        <li>Zero critical issues remaining</li>
+                        <li>Crash rate < 0.5%</li>
+                        <li>95%+ pass rate across all tests</li>
+                        <li>Coverage across all OS versions and states</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Phase 3 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Phase 3: Promote to Main</div>
+            </div>
+            <div class="slide-content">
+                <div class="phase-box">
+                    <div class="phase-number">03</div>
+                    <div class="phase-title">Production Deployment</div>
+                    <div class="phase-desc">Deploy validated release to all users</div>
+                </div>
+                
+                <div class="step-grid">
+                    <div class="step-card">
+                        <h3>✅ Final Validation</h3>
+                        <p>
+                            <strong>Testing Complete:</strong> 100% coverage achieved<br>
+                            <strong>Issues Resolved:</strong> All critical issues fixed<br>
+                            <strong>Quality Metrics:</strong> All thresholds met<br>
+                            <strong>Approval:</strong> Ready for production
+                        </p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <h3>🔀 Merge to Main Branch</h3>
+                        <p>
+                            <strong>Action:</strong> Merge internal → main<br>
+                            <strong>Code Review:</strong> Passed<br>
+                            <strong>CI/CD Checks:</strong> All green<br>
+                            <strong>Version Tag:</strong> v2.4.0
+                        </p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <h3>🚀 Deploy to Production</h3>
+                        <p>
+                            <strong>Platform:</strong> Google Play Store<br>
+                            <strong>Track:</strong> Production<br>
+                            <strong>Rollout:</strong> Staged (10% → 50% → 100%)<br>
+                            <strong>Monitoring:</strong> Real-time analytics active
+                        </p>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; padding: 30px; border-radius: 15px; margin-top: 30px; text-align: center;">
+                    <h3 style="font-size: 2em; margin-bottom: 15px;">🎉 Release Complete!</h3>
+                    <p style="font-size: 1.3em; opacity: 0.95;">Your app is now live for all users with confidence in quality and stability</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Benefits & Summary -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Benefits & Key Takeaways</div>
+            </div>
+            <div class="slide-content">
+                <h2 style="color: #2d3748; margin-bottom: 30px; font-size: 2.2em;">Why This Workflow Works</h2>
+                
+                <div class="testing-grid">
+                    <div class="testing-box">
+                        <h3>🎯 Comprehensive Coverage</h3>
+                        <ul>
+                            <li>550+ test sessions per release</li>
+                            <li>All Android OS versions (9-14)</li>
+                            <li>29 states across India</li>
+                            <li>Real-world conditions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="testing-box">
+                        <h3>⚡ Risk Mitigation</h3>
+                        <ul>
+                            <li>Catch issues before production</li>
+                            <li>Diverse testing scenarios</li>
+                            <li>Early detection of critical bugs</li>
+                            <li>Reduced customer complaints</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="testing-box">
+                        <h3>💰 Cost Effective</h3>
+                        <ul>
+                            <li>Crowdsourced testing at scale</li>
+                            <li>No infrastructure overhead</li>
+                            <li>Pay-per-test model</li>
+                            <li>Faster time to market</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="testing-box">
+                        <h3>📊 Data-Driven Decisions</h3>
+                        <ul>
+                            <li>Real-time testing metrics</li>
+                            <li>Issue tracking and prioritization</li>
+                            <li>Geographic insights</li>
+                            <li>Device compatibility data</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="background: #f7fafc; padding: 30px; border-radius: 15px; margin-top: 30px; border-left: 6px solid #667eea;">
+                    <h3 style="color: #2d3748; font-size: 1.8em; margin-bottom: 20px;">🔑 Success Formula</h3>
+                    <p style="color: #4a5568; font-size: 1.3em; line-height: 1.8;">
+                        <strong>Internal Expertise</strong> + <strong>Crowdsourced Diversity</strong> + <strong>Automated Workflow</strong> = <strong>High-Quality Releases</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Thank You -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-title">Thank You!</div>
+            </div>
+            <div class="slide-content">
+                <div style="text-align: center; padding: 100px 0;">
+                    <div style="font-size: 6em; margin-bottom: 40px;">🚀</div>
+                    <h2 style="font-size: 3em; color: #2d3748; margin-bottom: 30px;">Questions?</h2>
+                    <p style="font-size: 1.8em; color: #718096; line-height: 1.8; margin-bottom: 50px;">
+                        Let's discuss how we can optimize this workflow further
+                    </p>
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 20px; display: inline-block; margin-top: 40px;">
+                        <div style="font-size: 1.5em; margin-bottom: 15px;">📧 Contact</div>
+                        <div style="font-size: 1.3em; opacity: 0.95;">team@yourcompany.com</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-number">
+        <span id="current-slide">1</span> / <span id="total-slides">8</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" id="next-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                event.preventDefault();
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

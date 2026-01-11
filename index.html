@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parikshak</title>
+    <title>Android App Deployment Workflow - Presentation</title>
     <style>
         * {
             margin: 0;
@@ -365,7 +365,7 @@
         <!-- SLIDE 1: Title -->
         <div class="slide active">
             <div class="slide-header">
-                <div class="slide-title">🚀 Parikshak</div>
+                <div class="slide-title">🚀 Android App Deployment Workflow</div>
                 <div class="slide-subtitle">From Internal Branch to Main Release</div>
             </div>
             <div class="slide-content">
@@ -488,7 +488,7 @@
             </div>
         </div>
 
-        <!-- SLIDE 4: Internal Team Testing -->
+        <!-- SLIDE 4: Internal Team Testing with App UI -->
         <div class="slide">
             <div class="slide-header">
                 <div class="slide-title">Internal Team Testing</div>
@@ -500,92 +500,131 @@
                     <div class="phase-desc">50 internal testers validate core workflows with structured checklists</div>
                 </div>
 
-                <h3 style="color: #2d3748; margin-bottom: 20px; font-size: 1.8em;">📋 Example: Worker Onboarding Journey</h3>
-                
-                <div style="background: white; padding: 25px; border-radius: 12px; border: 3px solid #667eea; margin-bottom: 25px;">
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; font-size: 1.2em;">
-                        Test Rubric: Language Selection Flow
-                    </div>
-                    
-                    <div style="background: #f7fafc; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #48bb78;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <div style="flex: 1;">
-                                <strong style="color: #2d3748; font-size: 1.1em;">1. Open the app, a screen appears with 13 languages shown in a list</strong>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
+                    <!-- Left: Mobile App UI Mockup -->
+                    <div>
+                        <h3 style="color: #2d3748; margin-bottom: 20px; font-size: 1.6em; text-align: center;">📱 Parikshak Testing Interface</h3>
+                        <div style="max-width: 400px; margin: 0 auto; background: #1a3a3a; border-radius: 30px; padding: 15px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+                            <!-- Phone Header -->
+                            <div style="background: #0d4d4d; color: white; padding: 15px; border-radius: 15px 15px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                                <div style="font-size: 1.1em; font-weight: bold;">←</div>
+                                <div style="font-size: 1.1em; font-weight: bold;">Language Selection Test</div>
+                                <div style="background: #48bb78; color: white; padding: 5px 12px; border-radius: 8px; font-size: 0.85em; font-weight: bold;">मुख्य कार्य</div>
                             </div>
-                            <div style="display: flex; gap: 15px; margin-left: 20px;">
-                                <span style="background: #48bb78; color: white; padding: 8px 20px; border-radius: 6px; font-weight: bold;">✓ Yes</span>
-                                <span style="background: #e2e8f0; color: #718096; padding: 8px 20px; border-radius: 6px; font-weight: bold;">✗ No</span>
+                            
+                            <!-- Progress Bar -->
+                            <div style="background: #0d4d4d; padding: 20px 15px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <span style="color: white; font-size: 1.2em; font-weight: bold;">0/4</span>
+                                    <button style="background: #2a7a7a; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">सबमिट करें</button>
+                                </div>
+                                <div style="background: #2a5a5a; height: 12px; border-radius: 6px; overflow: hidden;">
+                                    <div style="background: linear-gradient(90deg, #48bb78 0%, #38a169 100%); width: 0%; height: 100%;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Question Card -->
+                            <div style="background: #f0f8f8; padding: 20px; margin: 15px;">
+                                <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                    <p style="color: #2d3748; font-size: 1em; line-height: 1.6; margin-bottom: 20px;">
+                                        <strong>ऐप खोलने पर एक स्क्रीन दिखाई देती है, जिसमें 13 भाषाएँ सूची के रूप में प्रदर्शित होती हैं।</strong>
+                                    </p>
+                                    
+                                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                                        <div style="background: #c6f6d5; border: 2px solid #48bb78; padding: 15px; border-radius: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer;">
+                                            <div style="width: 24px; height: 24px; border-radius: 50%; border: 3px solid #48bb78; background: white;"></div>
+                                            <span style="color: #22543d; font-weight: bold; font-size: 1.1em;">हाँ</span>
+                                        </div>
+                                        
+                                        <div style="background: white; border: 2px solid #e2e8f0; padding: 15px; border-radius: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer;">
+                                            <div style="width: 24px; height: 24px; border-radius: 50%; border: 3px solid #cbd5e0; background: white;"></div>
+                                            <span style="color: #4a5568; font-weight: bold; font-size: 1.1em;">नहीं</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <div style="background: #0d4d4d; padding: 20px; border-radius: 0 0 15px 15px;">
+                                <button style="width: 100%; background: linear-gradient(135deg, #38a169 0%, #2f855a 100%); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 1.1em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(56, 161, 105, 0.4);">
+                                    सबमिट करें →
+                                </button>
                             </div>
                         </div>
-                        <div style="color: #718096; font-size: 0.95em; margin-top: 8px;">
-                            Expected: Hindi, English, Tamil, Telugu, Kannada, Malayalam, Bengali, Marathi, Gujarati, Punjabi, Odia, Assamese, Urdu
-                        </div>
+                        <p style="text-align: center; color: #667eea; font-weight: bold; margin-top: 15px; font-size: 1.1em;">Parikshak: Karya App Testing</p>
                     </div>
 
-                    <div style="background: #f7fafc; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #48bb78;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <div style="flex: 1;">
-                                <strong style="color: #2d3748; font-size: 1.1em;">2. Click on button with text "Hindi", the bottom green button shows "हिंदी में आगे बढ़ें"</strong>
-                            </div>
-                            <div style="display: flex; gap: 15px; margin-left: 20px;">
-                                <span style="background: #48bb78; color: white; padding: 8px 20px; border-radius: 6px; font-weight: bold;">✓ Yes</span>
-                                <span style="background: #e2e8f0; color: #718096; padding: 8px 20px; border-radius: 6px; font-weight: bold;">✗ No</span>
+                    <!-- Right: Test Questions -->
+                    <div>
+                        <h3 style="color: #2d3748; margin-bottom: 20px; font-size: 1.6em;">📋 Test Rubric Questions</h3>
+                        
+                        <div style="background: #f7fafc; padding: 18px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid #667eea;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="flex: 1;">
+                                    <strong style="color: #2d3748; font-size: 1em;">1. Open the app, a screen appears with 13 languages shown in a list</strong>
+                                </div>
+                                <div style="display: flex; gap: 10px; margin-left: 15px;">
+                                    <span style="background: #c6f6d5; color: #22543d; padding: 6px 15px; border-radius: 6px; font-weight: bold; font-size: 0.9em;">हाँ</span>
+                                    <span style="background: #e2e8f0; color: #718096; padding: 6px 15px; border-radius: 6px; font-weight: bold; font-size: 0.9em;">नहीं</span>
+                                </div>
                             </div>
                         </div>
-                        <div style="color: #718096; font-size: 0.95em; margin-top: 8px;">
-                            Verify button text changes to match selected language
-                        </div>
-                    </div>
 
-                    <div style="background: #f7fafc; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #48bb78;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <div style="flex: 1;">
-                                <strong style="color: #2d3748; font-size: 1.1em;">3. Clicking the green button navigates to the registration screen in Hindi</strong>
-                            </div>
-                            <div style="display: flex; gap: 15px; margin-left: 20px;">
-                                <span style="background: #48bb78; color: white; padding: 8px 20px; border-radius: 6px; font-weight: bold;">✓ Yes</span>
-                                <span style="background: #e2e8f0; color: #718096; padding: 8px 20px; border-radius: 6px; font-weight: bold;">✗ No</span>
+                        <div style="background: #f7fafc; padding: 18px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid #667eea;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="flex: 1;">
+                                    <strong style="color: #2d3748; font-size: 1em;">2. Click on "Hindi", bottom button shows "हिंदी में आगे बढ़ें"</strong>
+                                </div>
+                                <div style="display: flex; gap: 10px; margin-left: 15px;">
+                                    <span style="background: #c6f6d5; color: #22543d; padding: 6px 15px; border-radius: 6px; font-weight: bold; font-size: 0.9em;">हाँ</span>
+                                    <span style="background: #e2e8f0; color: #718096; padding: 6px 15px; border-radius: 6px; font-weight: bold; font-size: 0.9em;">नहीं</span>
+                                </div>
                             </div>
                         </div>
-                        <div style="color: #718096; font-size: 0.95em; margin-top: 8px;">
-                            All UI elements should display in selected language
-                        </div>
-                    </div>
 
-                    <div style="background: #f7fafc; padding: 20px; border-radius: 10px; border-left: 4px solid #48bb78;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <div style="flex: 1;">
-                                <strong style="color: #2d3748; font-size: 1.1em;">4. User can navigate back and change language selection</strong>
-                            </div>
-                            <div style="display: flex; gap: 15px; margin-left: 20px;">
-                                <span style="background: #48bb78; color: white; padding: 8px 20px; border-radius: 6px; font-weight: bold;">✓ Yes</span>
-                                <span style="background: #e2e8f0; color: #718096; padding: 8px 20px; border-radius: 6px; font-weight: bold;">✗ No</span>
+                        <div style="background: #f7fafc; padding: 18px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid #667eea;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="flex: 1;">
+                                    <strong style="color: #2d3748; font-size: 1em;">3. Clicking green button navigates to registration in Hindi</strong>
+                                </div>
+                                <div style="display: flex; gap: 10px; margin-left: 15px;">
+                                    <span style="background: #c6f6d5; color: #22543d; padding: 6px 15px; border-radius: 6px; font-weight: bold; font-size: 0.9em;">हाँ</span>
+                                    <span style="background: #e2e8f0; color: #718096; padding: 6px 15px; border-radius: 6px; font-weight: bold; font-size: 0.9em;">नहीं</span>
+                                </div>
                             </div>
                         </div>
-                        <div style="color: #718096; font-size: 0.95em; margin-top: 8px;">
-                            Test language preference persistence
-                        </div>
-                    </div>
-                </div>
 
-                <div class="testing-grid">
-                    <div class="testing-box">
-                        <h3>📱 Other Critical Journeys</h3>
-                        <ul>
-                            <li>New feature validation</li>
-                            <li>Regression testing</li>
-                            <li>Performance benchmarks</li>
-                            <li>Edge case scenarios</li>
-                        </ul>
-                    </div>
-                    <div class="testing-box">
-                        <h3>📊 Testing Metrics</h3>
-                        <ul>
-                            <li><strong>50 testers</strong> (QA team)</li>
-                            <li><strong>15-20 test rubrics</strong> per release</li>
-                            <li><strong>100% completion</strong> required</li>
-                            <li><strong>Issues logged</strong> in real-time</li>
-                        </ul>
+                        <div style="background: #f7fafc; padding: 18px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid #667eea;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="flex: 1;">
+                                    <strong style="color: #2d3748; font-size: 1em;">4. User can navigate back and change language selection</strong>
+                                </div>
+                                <div style="display: flex; gap: 10px; margin-left: 15px;">
+                                    <span style="background: #c6f6d5; color: #22543d; padding: 6px 15px; border-radius: 6px; font-weight: bold; font-size: 0.9em;">हाँ</span>
+                                    <span style="background: #e2e8f0; color: #718096; padding: 6px 15px; border-radius: 6px; font-weight: bold; font-size: 0.9em;">नहीं</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin-top: 25px;">
+                            <h4 style="font-size: 1.2em; margin-bottom: 10px;">💰 Tester Empowerment</h4>
+                            <ul style="margin-left: 20px; line-height: 1.8; opacity: 0.95;">
+                                <li><strong>Earn:</strong> ₹10-50 per test completed</li>
+                                <li><strong>Learn:</strong> App testing skills & QA methodologies</li>
+                                <li><strong>Grow:</strong> Access to advanced testing projects</li>
+                            </ul>
+                        </div>
+
+                        <div class="testing-grid" style="margin-top: 20px;">
+                            <div class="testing-box" style="padding: 15px;">
+                                <h4 style="color: #2d3748; font-size: 1.1em; margin-bottom: 10px;">📊 Testing Metrics</h4>
+                                <ul style="font-size: 0.95em; line-height: 1.6;">
+                                    <li><strong>50 internal testers</strong></li>
+                                    <li><strong>15-20 rubrics</strong> per release</li>
+                                    <li><strong>100% completion</strong> required</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -870,6 +909,10 @@
                     <p style="font-size: 1.8em; color: #718096; line-height: 1.8; margin-bottom: 50px;">
                         Let's discuss how we can optimize this workflow further
                     </p>
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 20px; display: inline-block; margin-top: 40px;">
+                        <div style="font-size: 1.5em; margin-bottom: 15px;">📧 Contact</div>
+                        <div style="font-size: 1.3em; opacity: 0.95;">team@yourcompany.com</div>
+                    </div>
                 </div>
             </div>
         </div>
